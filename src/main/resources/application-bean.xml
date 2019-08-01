@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Xml 配置 -->
+    <!--<bean id="test" class="com.l.TeService"></bean>-->
+    <beans profile="dev">
+        <!-- 开发环境，具体加载bean或者properties文件 -->
+    </beans>
+    <beans profile="prod">
+        <!-- 测试环境，具体加载bean或者properties文件 -->
+    </beans>
+</beans>

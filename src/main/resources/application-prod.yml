@@ -1,0 +1,39 @@
+server:
+  tomcat:
+    max-threads: 200 # tomcat最大线程数，默认为200
+    uri-encoding: UTF-8  #url编码方式
+    accesslog:
+      enabled: true # 打开Tomcat的Access日志
+      pattern: 'common' #设置日志格式默认common
+      file-date-format: ".yyyy-MM-dd"
+  #      directory: 'logs' # 日志文件目录
+  port: 8081
+  servlet:
+    session:
+      timeout: 30m
+    context-path: /
+  compression:  # 开启http传输压缩(Gzip)
+    enabled: true
+    mime-types: application/json,text/html,application/xml # 压缩指定类型
+    min-response-size: 20KB # 大于20kb则压缩
+  #-------------------------------log 日志----------------------
+logging:
+  config: 'classpath:logback-spring.xml'  #日志配置文件地址
+  #--------------------------项目配置------------------------
+platform:
+  logsPath: "./logs" #定义日志存储的路径
+  uploadDir: "./storage"
+  #静态文件地址,用于dev模式,通过Springboot映射静态资源,prod 模式 通过Nginx处理静态资源,最后需要 /
+  staticPath: "G:/GitHub-workspace/vip-hoody-pi/storage/"
+spring:
+  datasource:
+    url: 'jdbc:mysql://localhost:3306/demo?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=true'
+    username: 'root'
+    password: 'password'
+
+#解决SwaggerUI 执行测试的问题，不过访问v2/api-doc 是通过nginx强制重定向完成的
+springfox:
+  documentation:
+    swagger:
+      v2:
+        host: 'pi.hoody.vip/api'
