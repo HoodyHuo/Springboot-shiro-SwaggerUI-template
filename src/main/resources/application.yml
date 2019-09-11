@@ -14,7 +14,11 @@ spring:
     username: 'root'
     password: 'AbcAbc'
     driverClassName: 'com.mysql.cj.jdbc.Driver'
-  #----------------------JPA------------------------------
+  #----------------------JPA--------org.springframework.boot.autoconfigure.data.redis.RedisProperties----------------------
+  redis:
+    host: localhost
+    port: 6379
+    password:
   jpa:
     database: MYSQL
     show-sql: false # Show or not log for each sql query

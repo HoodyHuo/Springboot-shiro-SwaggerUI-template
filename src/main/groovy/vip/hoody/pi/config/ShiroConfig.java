@@ -2,20 +2,20 @@
 package vip.hoody.pi.config;
 
 import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import vip.hoody.pi.domain.Permission;
 import vip.hoody.pi.domain.RequestMap;
 import vip.hoody.pi.domain.Role;
 import vip.hoody.pi.service.RequestMapService;
-import vip.hoody.pi.shiro.CustomRealm;
-import vip.hoody.pi.shiro.CustomSessionManager;
+import vip.hoody.pi.shiro.*;
 
 import java.util.List;
 
@@ -72,12 +72,12 @@ class ShiroConfig {
      * SecurityUtils.getSubject()来进行门面获取
      */
     @Bean
-    public DefaultWebSecurityManager defaultWebSecurityManager(CustomRealm customRealm) {
+    public DefaultWebSecurityManager defaultWebSecurityManager(CustomRealm customRealm,SessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //自定义realm
         securityManager.setRealm(customRealm);
         //自定义session管理
-        securityManager.setSessionManager(sessionManager());
+        securityManager.setSessionManager(sessionManager);
         return securityManager;
     }
 
@@ -87,11 +87,16 @@ class ShiroConfig {
      * @return
      */
     @Bean
-    public SessionManager sessionManager() {
+    public SessionManager sessionManager( SessionDAO redisSessionDAO) {
         CustomSessionManager customSessionManager = new CustomSessionManager();
         //这里可以不设置。Shiro有默认的session管理。如果缓存为Redis则需改用Redis的管理
-        //customSessionManager.setSessionDAO(redisSessionDAO());
+        customSessionManager.setSessionDAO(redisSessionDAO);
         return customSessionManager;
+    }
+
+    @Bean
+    public SessionDAO redisSessionDAO(RedisTemplate redisTemplate) {
+        return new RedisSessionDAO(redisTemplate);
     }
 
     @Bean
