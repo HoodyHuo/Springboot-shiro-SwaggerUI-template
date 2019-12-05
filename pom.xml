@@ -8,11 +8,11 @@
         <version>2.1.6.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>vip.hoody</groupId>
-    <artifactId>pi</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>pi</name>
-    <description>Project for Raspberry</description>
+    <groupId>tech.hoody</groupId>
+    <artifactId>platform</artifactId>
+    <version>0.0.2-SNAPSHOT</version>
+    <name>platform-base</name>
+    <description>Project for quick start</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -63,12 +63,6 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>2.9.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin.external.google</groupId>
-            <artifactId>android-json</artifactId>
-            <version>0.0.20131108.vaadin1</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
