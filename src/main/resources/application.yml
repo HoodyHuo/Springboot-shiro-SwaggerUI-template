@@ -19,6 +19,11 @@ spring:
     host: localhost
     port: 6379
     password:
+  #-----------------------mongo-----------------------
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/file-storage
+  #----------------------JPA------------------------------
   jpa:
     database: MYSQL
     show-sql: false # Show or not log for each sql query
@@ -38,8 +43,8 @@ spring:
   #-----------------------------servlet-------------------------------
   servlet:
     multipart:
-      max-file-size: 5MB #MB 意味上传着总文件大小不能超过5M
-      max-request-size: 10MB #MB 表示a的总请求大小multipart/form-data不能超过10M
+      max-file-size: 10MB #MB 意味上传着总文件大小不能超过5M
+      max-request-size: 50MB #MB 表示a的总请求大小multipart/form-data不能超过10M
 #-----------------------------shiro-------------------------------
 shiro:
   web:
