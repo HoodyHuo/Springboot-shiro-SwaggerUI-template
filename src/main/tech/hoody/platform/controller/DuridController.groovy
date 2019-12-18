@@ -1,4 +1,4 @@
-package vip.hoody.pi.controller
+package tech.hoody.platform.controller
 
 import com.alibaba.druid.stat.DruidStatManagerFacade
 import org.springframework.web.bind.annotation.GetMapping

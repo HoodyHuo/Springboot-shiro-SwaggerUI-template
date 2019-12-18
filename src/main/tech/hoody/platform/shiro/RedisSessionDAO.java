@@ -1,4 +1,4 @@
-package vip.hoody.pi.shiro;
+package tech.hoody.platform.shiro;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Hoody
  * CachingSessionDAO impl
  * deal the session DAO with Redis
  */

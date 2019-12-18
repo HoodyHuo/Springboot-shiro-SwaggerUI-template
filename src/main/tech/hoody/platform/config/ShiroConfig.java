@@ -17,6 +17,7 @@ import tech.hoody.platform.domain.Role;
 import tech.hoody.platform.service.RequestMapService;
 import tech.hoody.platform.shiro.CustomRealm;
 import tech.hoody.platform.shiro.CustomSessionManager;
+import tech.hoody.platform.shiro.RedisSessionDAO;
 
 import java.util.List;
 
