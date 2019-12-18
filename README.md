@@ -94,7 +94,7 @@ spring:
 `/src/main/groovy/vip/hoody/pi/shiro/CustomRealm.groovy`
 
 ````groovy
-package vip.hoody.pi.shiro
+package tech.hoody.platform.shiro
 
 import org.apache.shiro.authc.*
 import org.apache.shiro.authz.AuthorizationException
@@ -103,10 +103,10 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo
 import org.apache.shiro.realm.AuthorizingRealm
 import org.apache.shiro.subject.PrincipalCollection
 import org.springframework.beans.factory.annotation.Autowired
-import vip.hoody.pi.domain.Role
-import vip.hoody.pi.domain.User
-import vip.hoody.pi.service.AuthService
-import vip.hoody.pi.service.UserService
+import tech.hoody.platform.domain.Role
+import tech.hoody.platform.domain.User
+import tech.hoody.platform.service.AuthService
+import tech.hoody.platform.service.UserService
 
 import javax.security.auth.login.AccountException
 
@@ -193,7 +193,7 @@ class CustomRealm extends AuthorizingRealm {
 `/src/main/groovy/vip/hoody/pi/shiro/CustomSessionManager.groovy`
 
 ````groovy
-package vip.hoody.pi.shiro
+package tech.hoody.platform.shiro
 
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager
@@ -243,7 +243,7 @@ class CustomSessionManager extends DefaultWebSessionManager {
 `/src/main/groovy/vip/hoody/pi/config/ShiroConfig.java`
 
 ````java
-package vip.hoody.pi.config;
+package tech.hoody.platform.config;
 
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -254,12 +254,12 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import vip.hoody.pi.domain.Permission;
-import vip.hoody.pi.domain.RequestMap;
-import vip.hoody.pi.domain.Role;
-import vip.hoody.pi.service.RequestMapService;
-import vip.hoody.pi.shiro.CustomRealm;
-import vip.hoody.pi.shiro.CustomSessionManager;
+import tech.hoody.platform.domain.Permission;
+import tech.hoody.platform.domain.RequestMap;
+import tech.hoody.platform.domain.Role;
+import tech.hoody.platform.service.RequestMapService;
+import tech.hoody.platform.shiro.CustomRealm;
+import tech.hoody.platform.shiro.CustomSessionManager;
 
 import java.util.List;
 
@@ -431,7 +431,7 @@ class ShiroConfig {
 `/src/main/groovy/vip/hoody/pi/config/SwaggerConfig.java`
 
 ````java
-package vip.hoody.pi.config;
+package tech.hoody.platform.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -453,7 +453,7 @@ public class SwaggerConfig {
                 .apiInfo(apiInfo())
                 .select()
                 //swagger要扫描的包路径
-                .apis(RequestHandlerSelectors.basePackage("vip.hoody.pi.controller"))
+                .apis(RequestHandlerSelectors.basePackage("tech.hoody.platform.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
