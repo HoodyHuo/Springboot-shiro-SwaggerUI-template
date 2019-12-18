@@ -1,4 +1,4 @@
-package vip.hoody.pi
+package tech.hoody.platform
 
 import org.junit.Test
 import org.junit.runner.RunWith
