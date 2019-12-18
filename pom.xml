@@ -70,6 +70,12 @@
             <artifactId>flowable-spring-boot-starter</artifactId>
             <version>6.4.2</version>
         </dependency>
+        <!--canal-->
+        <dependency>
+            <groupId>com.alibaba.otter</groupId>
+            <artifactId>canal.client</artifactId>
+            <version>1.1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
