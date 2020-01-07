@@ -15,9 +15,7 @@ import tech.hoody.platform.domain.Permission;
 import tech.hoody.platform.domain.RequestMap;
 import tech.hoody.platform.domain.Role;
 import tech.hoody.platform.service.RequestMapService;
-import tech.hoody.platform.shiro.CustomRealm;
-import tech.hoody.platform.shiro.CustomSessionManager;
-import tech.hoody.platform.shiro.RedisSessionDAO;
+import tech.hoody.platform.shiro.*;
 
 import java.util.List;
 
@@ -52,15 +50,6 @@ class ShiroConfig {
     private static final String IS_ANONYMOUSLY = "anon";
 
     /**
-     * 注入自定义权限验证对象
-     */
-    @Bean
-    public CustomRealm customRealm() {
-        CustomRealm realm = new CustomRealm();
-        return new CustomRealm();
-    }
-
-    /**
      * 为了保证实现了Shiro内部lifecycle函数的bean执行 也是shiro的生命周期
      */
     @Bean
@@ -74,12 +63,16 @@ class ShiroConfig {
      * SecurityUtils.getSubject()来进行门面获取
      */
     @Bean
-    public DefaultWebSecurityManager defaultWebSecurityManager(CustomRealm customRealm,SessionManager sessionManager) {
+    public DefaultWebSecurityManager defaultWebSecurityManager(CustomRealm customRealm,
+                                                               SessionManager sessionManager,
+                                                               CustomCacheManager cacheManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //自定义realm
         securityManager.setRealm(customRealm);
         //自定义session管理
         securityManager.setSessionManager(sessionManager);
+        //自定义缓存管理
+        securityManager.setCacheManager(cacheManager);
         return securityManager;
     }
 
@@ -89,13 +82,30 @@ class ShiroConfig {
      * @return
      */
     @Bean
-    public SessionManager sessionManager( SessionDAO redisSessionDAO) {
+    public SessionManager sessionManager(SessionDAO redisSessionDAO, CustomSessionFactory customSessionFactory) {
         CustomSessionManager customSessionManager = new CustomSessionManager();
         //这里可以不设置。Shiro有默认的session管理。如果缓存为Redis则需改用Redis的管理
+        customSessionManager.setSessionFactory(customSessionFactory);
         customSessionManager.setSessionDAO(redisSessionDAO);
         return customSessionManager;
     }
 
+    /**
+     * 自定义Session工厂类，生产CustomerSession
+     *
+     * @return
+     */
+    @Bean
+    public CustomSessionFactory customSessionFactory() {
+        return new CustomSessionFactory();
+    }
+
+    /**
+     * 自定义SessionDao ，通过Redis进行Session保存
+     *
+     * @param redisTemplate
+     * @return
+     */
     @Bean
     public SessionDAO redisSessionDAO(RedisTemplate redisTemplate) {
         return new RedisSessionDAO(redisTemplate);

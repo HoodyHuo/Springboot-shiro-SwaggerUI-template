@@ -21,6 +21,9 @@ logging:
   config: 'classpath:logback-spring.xml'  #日志配置文件地址
   #--------------------------项目配置------------------------
 platform:
+  shiro:
+    realm:
+      is-single: true  #是否启用单用户只能在一处登录
   logsPath: "./logs" #定义日志存储的路径
   uploadDir: "./storage"
   #静态文件地址,用于dev模式,通过Springboot映射静态资源,prod 模式 通过Nginx处理静态资源,最后需要 /

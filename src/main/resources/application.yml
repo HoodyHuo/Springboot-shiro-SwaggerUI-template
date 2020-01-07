@@ -50,6 +50,9 @@ shiro:
   web:
     enabled: true #启用或停用shiro 权限过滤
 platform:
+  shiro:
+    realm:
+      is-single: true  #是否启用单用户只能在一处登录
   baseUrl: 'localhost'
   logsPath: "./logs"
   uploadDir: "./storage"
