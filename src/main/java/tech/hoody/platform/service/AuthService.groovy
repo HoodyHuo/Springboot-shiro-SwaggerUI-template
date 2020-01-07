@@ -1,8 +1,13 @@
 package tech.hoody.platform.service
 
-
+import org.apache.shiro.SecurityUtils
+import org.apache.shiro.authc.AuthenticationException
+import org.apache.shiro.authc.UsernamePasswordToken
 import org.apache.shiro.crypto.SecureRandomNumberGenerator
 import org.apache.shiro.crypto.hash.Md5Hash
+import org.apache.shiro.session.Session
+import org.apache.shiro.subject.Subject
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import tech.hoody.platform.domain.Permission
@@ -45,6 +50,21 @@ class AuthService {
         String ciphertext = new Md5Hash(password, salt, 3).toString(); //生成的密文
 
         return ciphertext;
+    }
+
+    /**
+     * 登录
+     * @param token
+     */
+    public Session login(UsernamePasswordToken token) {
+        Subject currentUser = SecurityUtils.getSubject()
+//        currentUser.login(new UsernamePasswordToken(username, password));
+        currentUser.login(token)
+        //从session中取出用户
+        User user = (User) currentUser.getPrincipal()
+        if (user == null) throw new AuthenticationException()
+        //返回登录用户的信息给前台，含用户的所有角色和权限
+        return currentUser.getSession()
     }
 
     /**

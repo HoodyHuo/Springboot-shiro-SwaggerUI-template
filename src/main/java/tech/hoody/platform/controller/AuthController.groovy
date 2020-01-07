@@ -5,9 +5,9 @@ import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiImplicitParams
 import io.swagger.annotations.ApiOperation
 import org.apache.shiro.SecurityUtils
-import org.apache.shiro.authc.AuthenticationException
 import org.apache.shiro.authc.UsernamePasswordToken
 import org.apache.shiro.authz.annotation.RequiresUser
+import org.apache.shiro.session.Session
 import org.apache.shiro.subject.Subject
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.ui.Model
@@ -42,17 +42,8 @@ class AuthController {
     ])
     @ApiOperation(value = "登录", notes = "根据账号密码返回用户")
     @PostMapping("login")
-    ResponseData login(
-            UsernamePasswordToken token, Model model) {
-        Subject currentUser = SecurityUtils.getSubject()
-        //登录
-//        currentUser.login(new UsernamePasswordToken(username, password));
-        currentUser.login(token)
-        //从session取出用户信息
-        User user = (User) currentUser.getPrincipal()
-        if (user == null) throw new AuthenticationException()
-        //返回登录用户的信息给前台，含用户的所有角色和权限
-        def session = currentUser.getSession()
+    ResponseData login(UsernamePasswordToken token, Model model) {
+        Session session = authService.login(token)
         return new ResponseData(data: session.id)
     }
 

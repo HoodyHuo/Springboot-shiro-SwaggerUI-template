@@ -1,12 +1,18 @@
 package tech.hoody.platform.shiro
 
+import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.*
 import org.apache.shiro.authz.AuthorizationException
 import org.apache.shiro.authz.AuthorizationInfo
 import org.apache.shiro.authz.SimpleAuthorizationInfo
 import org.apache.shiro.realm.AuthorizingRealm
+import org.apache.shiro.session.Session
 import org.apache.shiro.subject.PrincipalCollection
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.stereotype.Component
 import tech.hoody.platform.domain.Role
 import tech.hoody.platform.domain.User
 import tech.hoody.platform.service.AuthService
@@ -15,24 +21,34 @@ import tech.hoody.platform.service.UserService
 import javax.security.auth.login.AccountException
 
 /**
- * @auth Hoody* 自定义shiro 权限验证对象
+ * 自定义shiro 权限验证对象,
+ * @auth Hoody
  */
+
+@ConfigurationProperties(
+        prefix = "platform.shiro.realm"
+)
+@Component
 class CustomRealm extends AuthorizingRealm {
 
 
     @Autowired
-    UserService userService
+    private UserService userService
 
     @Autowired
-    AuthService authService
-
-
+    private AuthService authService
     /**
-     * 授权
-     * 定义如何获取用户的角色和权限的逻辑，给shiro做权限判断
-     * @param principals
-     * @return
+     * 是否启用
+     * 单一用户只能在一处登录
      */
+    private boolean isSingle
+
+/**
+ * 授权
+ * 定义如何获取用户的角色和权限的逻辑，给shiro做权限判断
+ * @param principals
+ * @return
+ */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         //null usernames are invalid
@@ -71,7 +87,9 @@ class CustomRealm extends AuthorizingRealm {
             String msg = "The credentials for account [" + username + "] are expired";
             throw new ExpiredCredentialsException(msg);
         }
-
+        if (this.isSingle) {
+            this.checkIsLogin(upToken)
+        }
         //查询用户的角色和权限存到SimpleAuthenticationInfo中，这样在其它地方
 //        SecurityUtils.getSubject().getPrincipal()//就能拿出用户的所有信息，包括角色和权限
         Set<Role> roles = authService.findRolesByUser(user)
@@ -89,4 +107,23 @@ class CustomRealm extends AuthorizingRealm {
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.password, getName())
         return info
     }
+
+    private void checkIsLogin(UsernamePasswordToken token) {
+        DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager) SecurityUtils.getSecurityManager()
+        DefaultWebSessionManager sessionManager = (DefaultWebSessionManager) securityManager.getSessionManager()
+        RedisSessionDAO sessionDAO = (RedisSessionDAO) sessionManager.getSessionDAO()
+        Session session = sessionDAO.getSessionByUsername(token.getUsername())
+        if (session != null) {
+            sessionDAO.delete(session);
+        }
+    }
+
+    boolean getIsSingle() {
+        return isSingle
+    }
+
+    void setIsSingle(boolean isSingle) {
+        this.isSingle = isSingle
+    }
 }
+

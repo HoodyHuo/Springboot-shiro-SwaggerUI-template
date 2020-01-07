@@ -17,7 +17,6 @@ class CustomSessionManager extends DefaultWebSessionManager {
 
     /** 存放 sessionID 的header key */
     private static final String AUTHORIZATION = "X-Token"
-
     private static final String REFERENCED_SESSION_ID_SOURCE = "Stateless request"
 
     /**
@@ -26,6 +25,8 @@ class CustomSessionManager extends DefaultWebSessionManager {
      * @param response
      * @return
      */
+
+
     @Override
     protected Serializable getSessionId(ServletRequest request, ServletResponse response) {
         String id = WebUtils.toHttp(request).getHeader(AUTHORIZATION)
